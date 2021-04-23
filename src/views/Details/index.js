@@ -35,21 +35,10 @@ const Details = () => {
     
     useEffect(() => {
         (async () => {
-            if(!(id > 100)){
-                const blogIsContext = blogs.find(b => b.id === Number(id))
-                if(blogIsContext.isEdited){
-                    setBlog(blogIsContext)
-                } else {
-                    const blog = await blogServices.getBlogById(id)
-                    setBlog(blog)
-                }              
-            } else {
-                const blogIsContext = blogs.find(b => b.id === Number(id))
-                setBlog(blogIsContext)
-            }
+            const blog = await blogServices.getBlogById(id)
+            setBlog(blog)
         })()
     }, [id, blogs])
-
     
     return (
         <Container className={classes.root}>
@@ -70,12 +59,22 @@ const Details = () => {
                         component="p"
                         className={classes.content}
                     >
-                        {blog.body}
+                        {blog.content}
                     </Typography>
                     <Typography
                         className={classes.user}
                     >
-                        userId: {blog.userId}
+                        Category: {blog.category.name}
+                    </Typography>
+                    <Typography
+                        className={classes.user}
+                    >
+                        Image: {blog.image}
+                    </Typography>
+                    <Typography
+                        className={classes.user}
+                    >
+                        Creation Date: {blog.createdAt}
                     </Typography>
                     <Button 
                         variant="contained" 
@@ -86,10 +85,11 @@ const Details = () => {
                     </Button>
                     <Box style={{ display: edit ? '' : 'none' }}>
                         <EditForm 
-                            id={blog.id}
+                            id={blog.ID}
                             title={blog.title}
-                            body={blog.body}
-                            userId={blog.userId}
+                            content={blog.content}
+                            image={blog.image}
+                            category={blog.category.name}
                             setEdit={setEdit}
                         />
                     </Box>

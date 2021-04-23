@@ -13,14 +13,15 @@ const useStyles = makeStyles({
 const Home = () => {
     const classes = useStyles()
     const { blogs } = useContext(BlogsContext)
+
     
     return (
         <Container className={classes.root} fixed>
             <Typography variant="h4" component="h2">Blogs</Typography>
             {blogs.map(b => 
                 <Blog 
-                    key={b.id}
-                    id={b.id}
+                    key={b.ID}
+                    id={b.ID}
                     title={b.title}
                 />    
             )}

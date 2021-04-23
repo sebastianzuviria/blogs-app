@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'https://jsonplaceholder.typicode.com/posts'
+const baseUrl = 'http://localhost:3001/api/blogs'
 
 const getBlogs = async () => {
     const response = await axios.get(baseUrl)
@@ -20,7 +20,7 @@ const createBlog = async (newBlog) => {
 }
 
 const editBlog = async (newBlog) => {
-    const response = await axios.put(`${baseUrl}/${newBlog.id}`, newBlog)
+    const response = await axios.patch(`${baseUrl}/${newBlog.id}`, newBlog)
 
     return response.data
 }

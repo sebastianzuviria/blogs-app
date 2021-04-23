@@ -11,6 +11,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import blogServices from '../../services/blogs'
 import BlogsContext from '../../context/BlogsContext'
+import NotificationContext from '../../context/NotificationContext'
 
 const useStyles = makeStyles({
     root: {
@@ -37,10 +38,12 @@ const useStyles = makeStyles({
 
 const Create = () => {
     const classes = useStyles()
+    const { setNotification } = useContext(NotificationContext)
 
     const [title, setTitle] = useState('')
-    const [body, setBody] = useState('')
-    const [userId, setUserId] = useState('')
+    const [content, setContent] = useState('')
+    const [image, setImage] = useState('')
+    const [category, setCategory] = useState('')
 
     const { createBlogContext } = useContext(BlogsContext)
     const history = useHistory()
@@ -51,18 +54,20 @@ const Create = () => {
         try {
             const newBlog = {
                 title: title,
-                body: body,
-                userId: userId
+                content: content,
+                image: image,
+                category: category
             }
             
             const createdBlog = await blogServices.createBlog(newBlog)
             createBlogContext(createdBlog)
+            setNotification(`Blog has been created`, 'success')
             setTitle('')
-            setBody('')
-            setUserId('')
+            setContent('')
+            setImage('')
             history.push('/')
         } catch (error) {
-            console.log(error)
+            setNotification(error.message, 'error')
         }
     }
 
@@ -84,19 +89,27 @@ const Create = () => {
                 
                 </FormControl>
                 <FormControl variant="filled" className={classes.input}>        
-                    <InputLabel htmlFor="component-filled">Body</InputLabel>
+                    <InputLabel htmlFor="component-filled">Content</InputLabel>
                     <FilledInput
                         type='text'
-                        value={body} 
-                        onChange={({ target }) => setBody(target.value)}
+                        value={content} 
+                        onChange={({ target }) => setContent(target.value)}
                     />
                 </FormControl>
                 <FormControl variant="filled" className={classes.input}>    
-                    <InputLabel htmlFor="component-filled"> User ID </InputLabel>
+                    <InputLabel htmlFor="component-filled"> Image </InputLabel>
                     <FilledInput
-                        type='number'
-                        value={userId} 
-                        onChange={({ target }) => setUserId(target.value)}
+                        type='text'
+                        value={image} 
+                        onChange={({ target }) => setImage(target.value)}
+                    />
+                </FormControl>
+                <FormControl variant="filled" className={classes.input}>    
+                    <InputLabel htmlFor="component-filled"> Category </InputLabel>
+                    <FilledInput
+                        type='text'
+                        value={category} 
+                        onChange={({ target }) => setCategory(target.value)}
                     />
                 </FormControl>
                 <Button 

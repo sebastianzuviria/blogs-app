@@ -18,12 +18,12 @@ export const BlogsContextProvider = ({children}) => {
     }
 
     const editBlogContext = (editedBlog) => {
-        const updatedblogs = blogs.map(b => b.id !== editedBlog.id ? b : editedBlog)
+        const updatedblogs = blogs.map(b => b.ID !== editedBlog.id ? b : editedBlog)
         setBlogs(updatedblogs)
     }
 
     const deleteBlogContext = (blogId) => {
-        const updatedBlogs = blogs.filter(b => b.id !== blogId)
+        const updatedBlogs = blogs.filter(b => b.ID !== blogId)
         setBlogs(updatedBlogs)
     }
 

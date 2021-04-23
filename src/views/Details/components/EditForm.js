@@ -9,6 +9,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import blogServices from '../../../services/blogs'
 import BlogsContext from '../../../context/BlogsContext'
+import NotificationContext from '../../../context/NotificationContext'
 
 const useStyles = makeStyles({
     root: {
@@ -30,12 +31,14 @@ const useStyles = makeStyles({
     }
 })
 
-const EditForm = ({ id, title, body, userId, setEdit }) => {
+const EditForm = ({ id, title, content, image, category, setEdit }) => {
     const classes = useStyles()
+    const { setNotification } = useContext(NotificationContext)
 
     const [editedTitle, setEditedTitle] = useState(title)
-    const [editedBody, setEditedBody] = useState(body)
-    const [editedUserId, setEditedUserId] = useState(userId)
+    const [editedContent, setEditedContent] = useState(content)
+    const [editedImage, setEditedImage] = useState(image)
+    const [editedCategory, setEditedCategory] = useState(category)
 
     const { editBlogContext } = useContext(BlogsContext)
 
@@ -45,17 +48,18 @@ const EditForm = ({ id, title, body, userId, setEdit }) => {
         const newBlog = {
             id: id,
             title: editedTitle,
-            body: editedBody,
-            userId: editedUserId,
-            isEdited: true
+            content: editedContent,
+            image: editedImage,
+            category: editedCategory
         }
 
         try {
             const editedBlog = await blogServices.editBlog(newBlog)
             editBlogContext(editedBlog)
+            setNotification(`Blog has been edited`, 'success')
             setEdit(false)
         } catch (error) {
-            console.log(error)
+            setNotification(error.message, 'error')
         }    
     }
 
@@ -72,19 +76,27 @@ const EditForm = ({ id, title, body, userId, setEdit }) => {
                 
                 </FormControl>
                 <FormControl variant="filled" className={classes.input}>        
-                    <InputLabel htmlFor="component-filled">Body</InputLabel>
+                    <InputLabel htmlFor="component-filled">Content</InputLabel>
                     <FilledInput
                         type='text'
-                        value={editedBody} 
-                        onChange={({ target }) => setEditedBody(target.value)}
+                        value={editedContent} 
+                        onChange={({ target }) => setEditedContent(target.value)}
                     />
                 </FormControl>
                 <FormControl variant="filled" className={classes.input}>    
-                    <InputLabel htmlFor="component-filled"> User ID </InputLabel>
+                    <InputLabel htmlFor="component-filled"> Image </InputLabel>
                     <FilledInput
-                        type='number'
-                        value={editedUserId} 
-                        onChange={({ target }) => setEditedUserId(target.value)}
+                        type='text'
+                        value={editedImage} 
+                        onChange={({ target }) => setEditedImage(target.value)}
+                    />
+                </FormControl>
+                <FormControl variant="filled" className={classes.input}>    
+                    <InputLabel htmlFor="component-filled"> Category </InputLabel>
+                    <FilledInput
+                        type='text'
+                        value={editedCategory} 
+                        onChange={({ target }) => setEditedCategory(target.value)}
                     />
                 </FormControl>
                 <Button 

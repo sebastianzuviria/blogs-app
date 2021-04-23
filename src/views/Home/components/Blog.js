@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { Card, CardContent, Typography, Button } from '@material-ui/core'
 import BlogsContext from '../../../context/BlogsContext'
+import NotificationContext from '../../../context/NotificationContext'
 import blogServices from '../../../services/blogs'
 
 const useStyles = makeStyles({
@@ -20,11 +21,13 @@ const useStyles = makeStyles({
 const Blog = ({id, title}) => {
     const classes = useStyles()
     const { deleteBlogContext } = useContext(BlogsContext)
+    const { setNotification } = useContext(NotificationContext)
 
     const handleDeletePost = async (blogId) => {
         try {
             await blogServices.deleteBlog(blogId)
             deleteBlogContext(blogId)
+            setNotification(`Blog has been deleted`, 'warning')
         } catch (error) {
             console.log(error)
         }    
